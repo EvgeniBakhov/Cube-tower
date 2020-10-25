@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     private CubePos nowCube = new CubePos(0, 1, 0);
     public float cubeChangePlaceSpeed = 0.5f;
     public Transform cubeToPlace;
+
     private List<Vector3> allCubesPositions = new List<Vector3> {
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 1),
@@ -55,8 +56,13 @@ public class GameController : MonoBehaviour
                 spawnedPositions.Add(position);
             }
         }
-        cubeToPlace.position = spawnedPositions[UnityEngine.Random.Range(0, spawnedPositions.Count)];
+        Vector3 randomPosition;
+        do
+        {
+            randomPosition = spawnedPositions[UnityEngine.Random.Range(0, spawnedPositions.Count)];
+        } while (randomPosition.Equals(cubeToPlace.position));
 
+        cubeToPlace.position = randomPosition;
     }
 
     private bool IsPositionEmpty(Vector3 cubePosition)
