@@ -6,9 +6,14 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    private CubePos nowCube = new CubePos(0, 1, 0);
     public float cubeChangePlaceSpeed = 0.5f;
+
     public Transform cubeToPlace;
+    public GameObject CubeToCreate;
+    public GameObject AllCubes;
+
+    private Rigidbody allCubesRigidBody;
+    private CubePos nowCube = new CubePos(0, 1, 0);
 
     private List<Vector3> allCubesPositions = new List<Vector3> {
         new Vector3(0, 0, 0),
@@ -26,13 +31,27 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        allCubesRigidBody = AllCubes.GetComponent<Rigidbody>();
         StartCoroutine(ShowCubePlace());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        /* If User presses LEFT MOUSE KEY or touches touchscreen*/
+        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0) {
+#if !UNITY_EDITOR
+        if(Input.GetTouch(0).phase != TouchPhase.Began)
+        return;
+#endif
+            GameObject newCube = Instantiate(CubeToCreate, cubeToPlace.position, Quaternion.identity) as GameObject;        //create new cube with coordinated of new cube on user's touch or click
+            newCube.transform.SetParent(AllCubes.transform);
+            nowCube.SetVector(cubeToPlace.position);
+            allCubesPositions.Add(nowCube.GetVector());
+
+            allCubesRigidBody.isKinematic = true;
+            allCubesRigidBody.isKinematic = false;
+        }
     }
 
     IEnumerator ShowCubePlace()
