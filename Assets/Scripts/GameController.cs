@@ -41,24 +41,27 @@ public class GameController : MonoBehaviour
     void Update()
     {
         /* If User presses LEFT MOUSE KEY or touches touchscreen*/
-        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0) {
+        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && cubeToPlace != null)
+        {
 #if !UNITY_EDITOR
         if(Input.GetTouch(0).phase != TouchPhase.Began)
         return;
 #endif
             GameObject newCube = Instantiate(CubeToCreate, cubeToPlace.position, Quaternion.identity) as GameObject;        //create new cube with random coordinates on user's touch or click
+            Debug.Log(newCube);
+            Debug.Log(AllCubes);
             newCube.transform.SetParent(AllCubes.transform);
             nowCube.SetVector(cubeToPlace.position);
             allCubesPositions.Add(nowCube.GetVector());
 
             allCubesRigidBody.isKinematic = true;
             allCubesRigidBody.isKinematic = false;
-
-            if(!gameOver && (allCubesRigidBody.velocity.magnitude > 0.1f))
-            {
-                Destroy(cubeToPlace.gameObject);
-                gameOver = true;
-            }
+        }
+        if (!gameOver && (allCubesRigidBody.velocity.magnitude > 0.1f))
+        {
+            Debug.Log(allCubesRigidBody.velocity.magnitude);
+            Destroy(cubeToPlace.gameObject);
+            gameOver = true;
         }
     }
 
