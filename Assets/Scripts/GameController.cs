@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
     public GameObject CubeToCreate;
     public GameObject AllCubes;
 
+    private bool gameOver;
+
     private Rigidbody allCubesRigidBody;
     private CubePos nowCube = new CubePos(0, 1, 0);
 
@@ -44,13 +46,19 @@ public class GameController : MonoBehaviour
         if(Input.GetTouch(0).phase != TouchPhase.Began)
         return;
 #endif
-            GameObject newCube = Instantiate(CubeToCreate, cubeToPlace.position, Quaternion.identity) as GameObject;        //create new cube with coordinated of new cube on user's touch or click
+            GameObject newCube = Instantiate(CubeToCreate, cubeToPlace.position, Quaternion.identity) as GameObject;        //create new cube with random coordinates on user's touch or click
             newCube.transform.SetParent(AllCubes.transform);
             nowCube.SetVector(cubeToPlace.position);
             allCubesPositions.Add(nowCube.GetVector());
 
             allCubesRigidBody.isKinematic = true;
             allCubesRigidBody.isKinematic = false;
+
+            if(!gameOver && (allCubesRigidBody.velocity.magnitude > 0.1f))
+            {
+                Destroy(cubeToPlace.gameObject);
+                gameOver = true;
+            }
         }
     }
 
