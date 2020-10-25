@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExplodeCubes : MonoBehaviour
 {
-   
+    public GameObject restartButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +30,7 @@ public class ExplodeCubes : MonoBehaviour
                 Child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(70f, Vector3.up, 5f);
                 Child.SetParent(null);
             }
+            restartButton.SetActive(true);
             Destroy(collision.gameObject);
             CollisionSet = true;
         }

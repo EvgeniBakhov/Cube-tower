@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     private bool gameOver;
 
     private Rigidbody allCubesRigidBody;
+    private Coroutine startGame;
     private CubePos nowCube = new CubePos(0, 1, 0);
 
     private List<Vector3> allCubesPositions = new List<Vector3> {
@@ -34,7 +35,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         allCubesRigidBody = AllCubes.GetComponent<Rigidbody>();
-        StartCoroutine(ShowCubePlace());
+        startGame = StartCoroutine(ShowCubePlace());
     }
 
     // Update is called once per frame
@@ -62,6 +63,7 @@ public class GameController : MonoBehaviour
             Debug.Log(allCubesRigidBody.velocity.magnitude);
             Destroy(cubeToPlace.gameObject);
             gameOver = true;
+            StopCoroutine(startGame);
         }
     }
 
